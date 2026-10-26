@@ -85,7 +85,7 @@
 
                     <div id="customTeacherInputGroup" class="hidden">
                         <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Nombre completo del Nuevo Profesor</label>
-                        <input type="text" id="customTeacherName" placeholder="Ej: Prof. Juan Pérez" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-300 rounded-lg text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <input type="text" id="customTeacherName" placeholder="Ej: Prof. Nombre" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-300 rounded-lg text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
 
                     <div>
@@ -427,20 +427,21 @@
     <script>
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyBF3W-qGru8nyi6v5g44WIK-JwxsP6rZapboNXPXi016BBTFMKBxH1G1-fl-oWi_Y-9g/exec"; 
 
-        const STORAGE_KEY_STUDENTS = 'tokenomics_students_v10';
-        const STORAGE_KEY_PENDING = 'tokenomics_pending_v10';
-        const STORAGE_KEY_HISTORY = 'tokenomics_history_v10';
-        const STORAGE_KEY_PROCESSED = 'tokenomics_processed_v10';
-        const STORAGE_KEY_DELETED_NAMES = 'tokenomics_deleted_names_v10';
-        const STORAGE_KEY_TEACHERS = 'tokenomics_teachers_v10';
+        const STORAGE_KEY_STUDENTS = 'tokenomics_students_v11';
+        const STORAGE_KEY_PENDING = 'tokenomics_pending_v11';
+        const STORAGE_KEY_HISTORY = 'tokenomics_history_v11';
+        const STORAGE_KEY_PROCESSED = 'tokenomics_processed_v11';
+        const STORAGE_KEY_DELETED_NAMES = 'tokenomics_deleted_names_v11';
+        const STORAGE_KEY_TEACHERS = 'tokenomics_teachers_v11';
 
+        // BASE DE DATOS INICIAL DE ESTUDIANTES (Puedes añadir aquí más estudiantes directamente si lo deseas)
         const DEFAULT_STUDENTS = [
             { id: 1, name: "Nelson Leandro Lavadenz Alba", course: "1ro de Secundaria", tokens: 100 }
         ];
 
+        // ÚNICO PERFIL INICIAL DE PROFESOR
         const DEFAULT_TEACHERS = [
-            "Tokenomics",
-            "Prof. Cesar Gonzales Barreda"
+            "Tokenomics"
         ];
 
         let students = getSafeStorage(STORAGE_KEY_STUDENTS, DEFAULT_STUDENTS);
@@ -479,7 +480,6 @@
             } catch (e) {}
         }
 
-        // RENDERIZAR LA LISTA DESPLEGABLE DE PROFESORES
         function renderTeacherSelect() {
             const select = document.getElementById('teacherSelect');
             let optionsHTML = teacherList.map(t => `<option value="${t}">${t}</option>`).join('');
@@ -564,7 +564,6 @@
             }
         }
 
-        // INICIO DE SESIÓN CON GESTIÓN DINÁMICA DE PROFESORES
         function handleLogin(event) {
             if (event) {
                 event.preventDefault();
@@ -584,13 +583,11 @@
                         return false;
                     }
                     activeTeacher = customTeacherName;
-                    // Añadir a la lista permanente de profesores si no existe
                     if (!teacherList.includes(activeTeacher)) {
                         teacherList.push(activeTeacher);
                         saveData();
                         renderTeacherSelect();
                     }
-                    // Limpiar el campo de texto para evitar que se quede pegado en el futuro
                     customTeacherInput.value = '';
                     document.getElementById('customTeacherInputGroup').classList.add('hidden');
                 }
@@ -658,7 +655,6 @@
             }
         }
 
-        // RENDERIZAR ESTUDIANTES
         function renderStudents() {
             const tableBody = document.getElementById('studentsTableBody');
             const search = document.getElementById('searchStudent').value.toLowerCase();
